@@ -2,7 +2,9 @@
 import Page from '../components/Page';
 import useLocales from 'src/hooks/useLocales';
 import { useState } from 'react';
-import { Tabs, Tab, CardHeader, Card, Box } from '@mui/material';
+import { Tabs, Tab, CardHeader, Card, Box, Typography } from '@mui/material';
+import LineGrowthWidget from 'src/components/widgets/LineGrowthWidget';
+import { ComingSoonIllustration } from 'src/assets';
 
 // ----------------------------------------------------------------------
 
@@ -42,9 +44,46 @@ export default function Statistics() {
           ))}
         </Tabs>
 
-        {pickedTab === TABS[0].value && <Box>Error occurence</Box>}
-        {pickedTab === TABS[1].value && <Box>Common errors</Box>}
-        {pickedTab === TABS[2].value && <Box>Error types</Box>}
+        {pickedTab === TABS[0].value && (
+          <Box display="flex" alignItems="center" justifyContent="space-between" my={10}>
+            <Box width="50%" display="flex" alignItems="center" justifyContent="center">
+              <LineGrowthWidget
+                chartColor="warning"
+                chartData={[5, 23, 15, 66, 55, 21, 6, 2, 5]}
+                percent={5.4}
+                title={translate('lastHour')}
+                total={150}
+              />
+            </Box>
+
+            <Box width="50%" display="flex" alignItems="center" justifyContent="center">
+              <LineGrowthWidget
+                chartColor="warning"
+                chartData={[50, 315, 65, 66, 55, 251, 611, 25, 25]}
+                percent={25.4}
+                title={translate('lastHour')}
+                total={921}
+                moreText="thanLastWeek"
+              />
+            </Box>
+          </Box>
+        )}
+        {pickedTab === TABS[1].value && (
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <ComingSoonIllustration sx={{ my: 5, height: 240 }} />
+            <Typography sx={{ mb: 3 }} variant="h3">
+              {translate('commingSoon')}
+            </Typography>
+          </Box>
+        )}
+        {pickedTab === TABS[2].value && (
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <ComingSoonIllustration sx={{ my: 5, height: 240 }} />
+            <Typography sx={{ mb: 3 }} variant="h3">
+              {translate('commingSoon')}
+            </Typography>
+          </Box>
+        )}
       </Card>
     </Page>
   );

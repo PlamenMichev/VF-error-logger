@@ -41,6 +41,7 @@ export default function Router() {
         { path: 'index', element: <Dashboard /> },
         { path: 'errors-list', element: <ErrorsList /> },
         { path: 'statistics', element: <Statistics /> },
+        { path: 'error-details', element: <ErrorDetails /> },
       ],
     },
     {
@@ -58,6 +59,7 @@ export default function Router() {
 // Dashboard
 const Dashboard = Loadable(lazy(() => import('../pages/Dashboard')));
 const ErrorsList = Loadable(lazy(() => import('../pages/ErrorsList')));
+const ErrorDetails = Loadable(lazy(() => import('../pages/ErrorDetails')));
 const Statistics = Loadable(lazy(() => import('../pages/Statistics')));
 const Login = Loadable(lazy(() => import('../pages/Login')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));

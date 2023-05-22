@@ -4,13 +4,13 @@ import {
   Card,
   CardHeader,
   CircularProgress,
-  Divider,
   MenuItem,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  styled,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -20,8 +20,17 @@ import { useEffect, useState } from 'react';
 import { ErrorType } from 'src/types/ErrorType';
 import { HOST_API } from 'src/config';
 import Iconify from 'src/components/Iconify';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
+
+const StyledLink = styled(Link)(() => ({
+  color: 'inherit',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}));
 
 export default function ErrorsList() {
   const { translate } = useLocales();
@@ -90,7 +99,9 @@ type ErrorTableRowProps = {
   row: ErrorType;
 };
 
-function ErrorTableRow({ row }: ErrorTableRowProps) {
+export function ErrorTableRow({ row }: ErrorTableRowProps) {
+  const { translate } = useLocales();
+
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -101,38 +112,41 @@ function ErrorTableRow({ row }: ErrorTableRowProps) {
     setOpenMenuActions(null);
   };
 
-  const handleDownload = () => {
+  const handleSendToJira = () => {
     handleCloseMenu();
     console.log('DOWNLOAD', row.id);
   };
 
-  const handlePrint = () => {
+  const handleContactUser = () => {
     handleCloseMenu();
     console.log('PRINT', row.id);
   };
 
-  const handleShare = () => {
+  const handleSendToDeveloper = () => {
     handleCloseMenu();
     console.log('SHARE', row.id);
   };
 
-  const handleDelete = () => {
-    handleCloseMenu();
-    console.log('DELETE', row.id);
-  };
-
   return (
-    <TableRow key={row.id}>
-      <TableCell>{row.status}</TableCell>
-
-      <TableCell>{row.description}...</TableCell>
-
-      <TableCell>{row.user}</TableCell>
+    <TableRow key={row.id} hover>
+      <TableCell>
+        <StyledLink to="/dashboard/error-details">{row.status}</StyledLink>
+      </TableCell>
 
       <TableCell>
-        {new Date(row.date).toLocaleDateString('da-DK') +
-          ' ' +
-          new Date(row.date).toLocaleTimeString('da-DK')}
+        <StyledLink to="/dashboard/error-details">{row.description}...</StyledLink>
+      </TableCell>
+
+      <TableCell>
+        <StyledLink to="/dashboard/error-details">{row.user}</StyledLink>
+      </TableCell>
+
+      <TableCell>
+        <StyledLink to="/dashboard/error-details">
+          {new Date(row.date).toLocaleDateString('da-DK') +
+            ' ' +
+            new Date(row.date).toLocaleTimeString('da-DK')}
+        </StyledLink>
       </TableCell>
 
       <TableCell align="right">
@@ -142,26 +156,19 @@ function ErrorTableRow({ row }: ErrorTableRowProps) {
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem onClick={handleDownload}>
-                <Iconify icon={'eva:download-fill'} />
-                Download
+              <MenuItem onClick={handleSendToJira}>
+                <Iconify icon={'majesticons:bug-2'} minWidth={20} />
+                {translate('report')}
               </MenuItem>
 
-              <MenuItem onClick={handlePrint}>
-                <Iconify icon={'eva:printer-fill'} />
-                Print
+              <MenuItem onClick={handleContactUser}>
+                <Iconify icon={'eva:printer-fill'} minWidth={20} />
+                {translate('contactUser')}
               </MenuItem>
 
-              <MenuItem onClick={handleShare}>
-                <Iconify icon={'eva:share-fill'} />
-                Share
-              </MenuItem>
-
-              <Divider sx={{ borderStyle: 'dashed' }} />
-
-              <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
+              <MenuItem onClick={handleSendToDeveloper}>
+                <Iconify icon={'majesticons:settings-cog'} minWidth={20} />
+                {translate('developer')}
               </MenuItem>
             </>
           }
